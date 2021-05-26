@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "*.spec": "gauge",
+    "*.cpt": "gauge"
+  },
+  "editor.codeLens": true,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 500
+}
