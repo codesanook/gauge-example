@@ -5,10 +5,10 @@ on:
       - main
 
 env:
-  NODE_VERSION: 12.x # Set this to change the Node.js version to use
+  NODE_VERSION: 12.x # Set the Node.js version to use.
 jobs:
-  run_unit_test:
-    name: Run unit test
+  run_e2e_test:
+    name: Run all Gauge test scenarios
     # Find more virtual environment. https://github.com/actions/virtual-environments
     runs-on: ubuntu-18.04
     steps:
@@ -21,8 +21,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Run all test scenario with Gauge
+      - name: Setup Gauge CLI
+        run: npm install -g @getgauge/cli
+
+      - name: Run all test scenarios
         run: |
-          npm install -g @getgauge/cli
           yarn install
           yarn run test
