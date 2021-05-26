@@ -1,0 +1,28 @@
+name: Run E2E workflow
+on:
+  push:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: 12.x # Set this to change the Node.js version to use
+jobs:
+  run_unit_test:
+    name: Run unit test
+    # Find more virtual environment. https://github.com/actions/virtual-environments
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout the latest source code from the current branch
+        uses: actions/checkout@v2
+
+      - name: Use Node.js version ${{ env.NODE_VERSION }}
+        # https://github.com/actions/setup-node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Run all test scenario with Gauge
+        run: |
+          npm install -g @getgauge/cli
+          yarn install
+          yarn run test
