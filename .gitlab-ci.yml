@@ -1,13 +1,22 @@
 stages:
   - test
 
-test:
+run_e2e_test:
   stage: test
-  image: node:12-alpine
+  image: ubuntu:18.04
+  only:
+    - main
+
   before_script:
-    - npm install -g @getgauge/cli
+    - apt-get update
+    - apt-get install -y curl unzip
+    - apt-get install -y libpangocairo-1.0-0 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libgconf2-4 libasound2 libatk1.0-0 libgtk-3-0 libgbm-dev
+
+    - curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+    - apt-get install -y nodejs
+    - npm install -g yarn
+    - curl -SsL https://downloads.gauge.org/stable | bash -
+
   script:
     - yarn install
     - yarn test
-  only:
-    - main

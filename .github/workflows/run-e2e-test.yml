@@ -6,6 +6,7 @@ on:
 
 env:
   NODE_VERSION: 12.x # Set the Node.js version to use.
+
 jobs:
   run_e2e_test:
     name: Run all Gauge test scenarios

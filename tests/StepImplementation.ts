@@ -7,7 +7,7 @@ import assert = require("assert");
 export default class StepImplementation {
   @BeforeSuite()
   public async beforeSuite() {
-    await openBrowser({ headless: true });
+    await openBrowser({ headless: true, args: ['--no-sandbox'] });
   }
 
   @AfterSuite()
