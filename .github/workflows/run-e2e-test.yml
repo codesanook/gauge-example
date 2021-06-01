@@ -26,11 +26,6 @@ jobs:
       - name: Setup Gauge CLI
         run: npm install -g @getgauge/cli
 
-      - name: Run all test scenarios
-        run: |
-          yarn install
-          yarn run test
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -43,6 +38,11 @@ jobs:
           registry: ${{ secrets.LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Run all test scenarios
+        run: |
+          yarn install
+          yarn run test
 
       - name: Push a new image to container registry
         id: docker_build
