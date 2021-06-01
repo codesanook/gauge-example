@@ -1,8 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
-./oauth2-proxy \
-  --client-id $oauth2_client_id \
-  --client-secret $oauth2_client_secret \
-  --redirect-url $redirect_url \
-  --config "./oauth_config.cfg" \
-& serve --listen 3000 --no-clipboard .
+# Run two services
+./oauth2-proxy --client-id $OAUTH2_CLIENT_ID --client-secret $OAUTH2_CLIENT_SECRET --redirect-url $OAUTH2_REDIRECT_URL --config "./oauth_config.cfg" & 
+serve --listen 3000 --no-clipboard .

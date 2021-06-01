@@ -43,7 +43,7 @@ jobs:
       # https://docs.docker.com/docker-hub/
       - name: Build and push a custom image
         run: |
-          docker build --tag ${{ env.DOCKER_IMAGE_NAME }} --target release .
+          docker build --tag ${{ env.DOCKER_IMAGE_NAME }} .
           docker push ${{ env.DOCKER_IMAGE_NAME }}
 
       # Before downloading a publish profile, make sure that you have set WEBSITE_WEBDEPLOY_USE_SCM
