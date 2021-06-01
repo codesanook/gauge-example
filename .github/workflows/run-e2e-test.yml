@@ -6,9 +6,7 @@ on:
 
 env:
   NODE_VERSION: 12.x # Set the Node.js version to use.
-
-  # Example of image name `your-name/gauge-example:0fd5f6b9a71eb9dcf5f30c70f6e1b9b77dfadfb5` 
-  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.sha }}
+  DOCKER_IMAGE_NAME: ${{ secrets.LOGIN_SERVER }}/gauge-example:${{ github.sha }}
 
 jobs:
   run_e2e_test:
@@ -33,25 +31,22 @@ jobs:
           yarn install
           yarn run test
 
-      # https://github.com/docker/login-action/releases
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
+      - uses: azure/docker-login@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          login-server: ${{ secrets.LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
-      # https://docs.docker.com/docker-hub/
-      - name: Build and push a custom image
+      - name: Push a new image to container registry
         run: |
-          docker build --tag ${{ env.DOCKER_IMAGE_NAME }} .
+          docker build . --tag ${{ env.DOCKER_IMAGE_NAME }}
           docker push ${{ env.DOCKER_IMAGE_NAME }}
 
-      # Before downloading a publish profile, make sure that you have set WEBSITE_WEBDEPLOY_USE_SCM
-      # in App Service Configuration to true
-      # configure port number 
-      # https://docs.microsoft.com/en-us/azure/app-service/configure-custom-container?pivots=container-linux#configure-port-number
-      # WEBSITES_PORT
-      # connection string
+        # Before downloading a publish profile, make sure that you have set WEBSITE_WEBDEPLOY_USE_SCM
+        # in App Service Configuration to true
+        # configure port number 
+        # https://docs.microsoft.com/en-us/azure/app-service/configure-custom-container?pivots=container-linux#configure-port-number
+        # WEBSITES_PORT
       - uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
