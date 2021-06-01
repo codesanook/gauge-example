@@ -1,30 +1,11 @@
-#FROM golang:buster
+FROM quay.io/oauth2-proxy/oauth2-proxy:v7.1.3-amd64 as oauth2
+
 FROM node:12-alpine
 EXPOSE 8000
 WORKDIR /app
 
-#RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
-#RUN apt-get install -y nodejs
-
-# 1
-#RUN go get github.com/oauth2-proxy/oauth2-proxy
-#RUN go build github.com/oauth2-proxy/oauth2-proxy
-
-# 2
-#RUN go get -d -v github.com/oauth2-proxy/oauth2-proxy
-#RUN go install -v github.com/oauth2-proxy/oauth2-proxy
-
-# which will put the binary in $GOROOT/bin
-
-#RUN wget https://github.com/oauth2-proxy/oauth2-proxy/releases/download/v7.1.3/oauth2-proxy-v7.1.3.linux-amd64.tar.gz
-#RUN tar -vxf oauth2-proxy-v7.1.3.linux-amd64.tar.gz
-#RUN rm oauth2-proxy-v7.1.3.linux-amd64.tar.gz
-#RUN mv oauth2-proxy-v7.1.3.linux-amd64/oauth2-proxy .
-
-
 RUN npm install -g serve
-
-COPY oauth2-proxy ./
+COPY --from=oauth2 ./bin/oauth2-proxy oauth2-proxy
 RUN chmod +x oauth2-proxy
 
 COPY ./entrypoint.sh ./
