@@ -31,16 +31,25 @@ jobs:
           yarn install
           yarn run test
 
-      - uses: azure/docker-login@v1
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to container registry
+        uses: docker/login-action@v1 
         with:
-          login-server: ${{ secrets.LOGIN_SERVER }}
+          registry: ${{ secrets.LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Push a new image to container registry
-        run: |
-          docker build . --tag ${{ env.DOCKER_IMAGE_NAME }}
-          docker push ${{ env.DOCKER_IMAGE_NAME }}
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ env.DOCKER_IMAGE_NAME }}
 
         # Before downloading a publish profile, make sure that you have set WEBSITE_WEBDEPLOY_USE_SCM
         # in App Service Configuration to true
