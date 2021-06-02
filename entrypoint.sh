@@ -1,10 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-# List all Go environment variables 
-go env
-
-# Run two services
-$GOPATH/bin/oauth2-proxy \
+# Run oauth2-proxy and serve services
+./oauth2-proxy \
   --client-id $OAUTH2_CLIENT_ID \
   --client-secret $OAUTH2_CLIENT_SECRET \
   --redirect-url $OAUTH2_REDIRECT_URL \
