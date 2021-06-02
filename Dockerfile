@@ -1,12 +1,14 @@
-FROM quay.io/oauth2-proxy/oauth2-proxy:v7.1.3-amd64 as oauth2
-
-FROM node:12-alpine
+FROM golang:latest
 EXPOSE 8000
 WORKDIR /app
 
+# Build oauth2-proxy binary to $GOPATH/bin/oauth2-proxy
+RUN go get github.com/oauth2-proxy/oauth2-proxy
+
+# Prepare serve
+RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
 RUN npm install -g serve
-COPY --from=oauth2 ./bin/oauth2-proxy oauth2-proxy
-RUN chmod +x oauth2-proxy
 
 COPY ./entrypoint.sh ./
 RUN chmod +x entrypoint.sh
